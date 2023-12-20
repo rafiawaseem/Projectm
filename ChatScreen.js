@@ -20,7 +20,7 @@ const ChatScreen = () => {
         const storedBuilderId = await AsyncStorage.getItem('AcceptedBuilderId');
         const builderObject = JSON.parse(storedBuilderId);
         setBuilderId(builderObject);
-        console.log("builder id:", builderId);
+        console.log("Builder id:", builderId);
       } catch (error) {
         console.error('Error fetching client projects:', error);
       }
