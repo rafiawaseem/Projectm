@@ -17,7 +17,7 @@ const Bids = () => {
         setpostId(userObject);
 
         // Fetch builder's bids based on builderId
-        const response = await axios.get('http://192.168.43.138:8000/api/bid');
+        const response = await axios.get('http://192.168.5.104:8000/api/bid');
         console.log(response.data);
         const builderPosts = response.data.filter(bids => bids.model_id === userObject);
         setBuilderBids(builderPosts);
@@ -30,12 +30,21 @@ const Bids = () => {
     fetchData();
   }, [postId]); 
 
-  const handleAcceptBid = async (builderId) => {
+  const handleAcceptBid = async (bidId) => {
     try {
       // Store builderId in async storage
-      await AsyncStorage.setItem('AcceptedBuilderId', JSON.stringify(builderId));
-      console.log('Builder ID accepted:', builderId);
-      navigation.navigate('ChatScreen')
+      await AsyncStorage.setItem('AcceptedId', JSON.stringify(bidId));
+      console.log(' ID accepted:', bidId);
+      const response = await axios.post('http://192.168.5.104:8000/api/bid-proposal/accept',
+        { bidProposalId: bidId },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log(response.data.message);
+      // navigation.navigate('ChatScreen')
       // Additional logic or navigation can be added here
     } catch (error) {
       console.error('Error storing builderId:', error);
@@ -59,7 +68,7 @@ const Bids = () => {
                 <Text style={styles.bidProperty}>{`Bid Price: ${bid.bid_price}`}</Text>
                 <Text style={styles.bidProperty}>{`Post ID: ${bid.model_id}`}</Text>
                 <Text style={styles.bidProperty}>{`Date: ${bid.created_at}`}</Text>
-                <TouchableOpacity onPress={() => handleAcceptBid(bid.builder_id)}>
+                <TouchableOpacity onPress={() => handleAcceptBid(bid.id)}>
                   <Text style={styles.acceptBidButton}>Accept Bid</Text>
                 </TouchableOpacity>
               </View>

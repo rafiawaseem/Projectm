@@ -18,7 +18,7 @@ const handleButtonPress=(buttonName)=>{
     // Conditionally make API call based on the selected button
     if (selectedButton === 'button1') {
       try {
-        const apiUrl = 'http://192.168.43.138:8000/api/client/login';  // Replace with your actual API URL
+        const apiUrl = 'http://192.168.5.104:8000/api/client/login';  // Replace with your actual API URL
         const response = await axios.post(apiUrl, {
           email: email,
           password: password,
@@ -35,7 +35,7 @@ const handleButtonPress=(buttonName)=>{
       
     } else if (selectedButton === 'button2') {
       try {
-        const apiUrl = 'http://192.168.43.138:8000/api/builder/login';  // Replace with your actual API URL
+        const apiUrl = 'http://192.168.5.104:8000/api/builder/login';  // Replace with your actual API URL
         const response = await axios.post(apiUrl, {
           email: email,
           password: password,
