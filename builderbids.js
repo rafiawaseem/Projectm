@@ -16,7 +16,7 @@ const BuilderBids = () => {
         setBuilderId(userObject);
 
         // Fetch builder's bids based on builderId
-        const response = await axios.get('http://192.168.43.138:8000/api/bid');
+        const response = await axios.get('http://192.168.5.105:8000/api/bid');
         console.log(response.data);
         const builderPosts = response.data.filter(bids => bids.builder_id === userObject);
         setBuilderBids(builderPosts);

@@ -11,7 +11,7 @@ export default function VPlans() {
   const [clientPostsArray, setClientPostsArray] = useState([]);
   const [selectedPostId, setSelectedPostId] = useState(null); 
   useEffect(() => {
-    axios.get('http://192.168.43.138:8000/api/project')
+    axios.get('http://192.168.5.105:8000/api/project')
     .then(response => {
       setClientPostsArray(response.data);
     })

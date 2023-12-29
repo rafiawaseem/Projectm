@@ -1,26 +1,65 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, FlatList, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Asset } from 'expo-asset';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const ChatListScreen = () => {
-  const data = [
-    { key: 'item1', title: 'Builder 1', description: 'Tap to chat.', imageSource: require('./assets/profile.jpg') },
-    { key: 'item2', title: 'Builder 2', description: 'Tap to chat.', imageSource: require('./assets/profile.jpg') },
-    { key: 'item3', title: 'Builder 3', description: 'Tap to chat.', imageSource: require('./assets/profile.jpg') },
-    // Add more items here
-  ];
+  const [ClientId, setClientId] = useState('');
+  const [builders, setBuilders] = useState([]);
+  const [builderId,setBuilderId]=useState('');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem('clientId');
+        const userObject = JSON.parse(storedUserId);
+        setClientId(userObject.id);
+        console.log("client id:", userObject.id);
+  
+        const response = await axios.get(
+          `http://192.168.5.105:8000/api/client-chat-list/${userObject.id}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+  
+        console.log(response.data);
+        setBuilders(response.data);
+
+      } catch (error) {
+        console.error('Error getting chat list:', error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
   const getImageUri = (asset) => Asset.fromModule(asset).uri;
 
   const navigation = useNavigation();
+  // <Image source={{uri: getImageUri(item.imageSource)}} style={styles.itemImage} />
+
+  const Handlepress=(builderid) =>{
+    setBuilderId(builderid);
+ 
+   // Log the post ID inside a callback function
+   setBuilderId(async (newId) => {
+     console.log("builderid:", newId);
+     AsyncStorage.setItem('builder', JSON.stringify(newId));
+     const storedId = await AsyncStorage.getItem('builder');
+     console.log('builder ID stored successfully. Stored ID:', storedId);
+    navigation.navigate('ChatScreen');
+   })}
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('ChatScreen', { contact: item })}>
+    <TouchableOpacity onPress={() => Handlepress(item.builder.id)}>
       <View style={styles.itemContainer}>
-        <Image source={{uri: getImageUri(item.imageSource)}} style={styles.itemImage} />
         <View style={styles.itemTextContainer}>
-          <Text style={styles.itemTitle}>{item.title}</Text>
-          <Text style={styles.itemDescription}>{item.description}</Text>
+        <Text style={styles.itemDescription}>{`Builder ID: ${item.builder.id}`}</Text>
+        <Text style={styles.itemTitle}>{`Username: ${item.builder.username}`}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -28,8 +67,8 @@ const ChatListScreen = () => {
 
   return (
     <FlatList
-      data={data}
-      keyExtractor={(item) => item.key}
+      data={builders}
+      keyExtractor={(item) => item.builder.id.toString()}
       renderItem={renderItem}
       contentContainerStyle={styles.container}
     />
@@ -40,6 +79,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 16,
     paddingHorizontal: 8,
+
   },
   itemContainer: {
     height:80,
@@ -62,6 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color:'#ffffff',
     fontWeight: 'bold',
+    // marginTop:-20
   },
   itemDescription: {
     fontSize: 16,

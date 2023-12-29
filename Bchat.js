@@ -1,45 +1,89 @@
-import React, { useState } from 'react';
-import { View, FlatList, TextInput, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, FlatList, TextInput, Button, Text, StyleSheet } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Bchat = ({ route }) => {
-  const { contact } = route.params;
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
+const Bchat = () => {
+  const [builderId,setbuilderid]=useState('');
+  const [clientId, setClientId] = useState();
+  const [chats, setChats] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
 
-  const sendMessage = () => {
-    if (message) {
-      setMessages([...messages, { id: messages.length + 1, text: message }]);
-      setMessage('');
+  useEffect( () => {
+    const fetchData = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem('builderId');
+        const userObject = JSON.parse(storedUserId);
+        setbuilderid(userObject.id);
+        const storedclientId = await AsyncStorage.getItem('client');
+        const clientobject = JSON.parse(storedclientId);
+        setClientId(clientobject);
+        console.log("client id:", clientId);
+        console.log("Builder id:", builderId);
+      } catch (error) {
+        console.error('Error fetching builder projects:', error);
+      }
+      // Fetch chats for the user
+      fetchChats();
+    };
+  
+    fetchData();
+  }, [clientId, builderId]);
+
+  const fetchChats = async () => {
+    try {
+      const response = await axios.get(`http://192.168.5.105:8000/api/builder/chats/${builderId}/${clientId}`);
+      setChats(response.data);
+    } catch (error) {
+      console.error('Error fetching builder chats:', error);
     }
   };
+  const messages ={
+    sender_id: builderId,
+    receiver_id: clientId,
+    message_content: newMessage,
+  };
+  
+  const sendMessage =async () => {
+    
+    try {
+      const response = await axios.post('http://192.168.5.105:8000/api/builder/send-message', JSON.stringify(messages),{headers:{
+        'Content-Type': 'application/json',
+      }});
+      setChats([...chats, response.data]);
+
+      // Handle the response as needed (e.g., update the UI, show a success message)
+      console.log('Message sent successfully:', response.data);
+
+      // Clear the message input after sending
+      setNewMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+      // Handle errors (e.g., show an error message to the user)
+    }
+  };
+
+  const isSender = (message) => message.sender_id === builderId;
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={messages}
+        data={chats}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.messageContainer}>
-            <View style={styles.messageBubble}>
-              <Text style={styles.messageText}>{item.text}</Text>
-            </View>
+          <View style={isSender(item) ? styles.senderMessage : styles.receiverMessage}>
+            <Text>{item.message_content}</Text>
           </View>
         )}
       />
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          value={message}
-          onChangeText={setMessage}
-          placeholder="Type a message..."
-          placeholderTextColor={'#8a2be2'}
+          placeholder="Type your message..."
+          value={newMessage}
+          onChangeText={(text) => setNewMessage(text)}
         />
-        <TouchableOpacity
-          style={styles.sendButton}
-          onPress={sendMessage}
-        >
-          <Text style={styles.sendButtonText}>Send</Text>
-        </TouchableOpacity>
+        <Button title="Send" onPress={sendMessage} />
       </View>
     </View>
   );
@@ -48,21 +92,21 @@ const Bchat = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 10,
   },
-  messageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginBottom: 16,
-  },
-  messageBubble: {
-    backgroundColor: '#007AFF',
-    padding: 8,
+  senderMessage: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#99ccff', // Sender's message color
+    padding: 10,
+    marginVertical: 5,
     borderRadius: 8,
-    maxWidth: '80%',
   },
-  messageText: {
-    color: 'white',
+  receiverMessage: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#e6e6e6', // Receiver's message color
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 8,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -70,28 +114,11 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    marginRight: 8,
-    padding: 8,
+    marginRight: 10,
+    padding: 10,
     borderWidth: 1,
-    borderColor: '#8a2be2',
+    borderColor: '#ccc',
     borderRadius: 8,
-  },
-  sendButton: {
-    height: 41,
-    backgroundColor: '#8a2be2',
-    borderRadius: 8,
-    paddingVertical: 9,
-    paddingHorizontal: 16,
-    alignContent: 'center',
-    alignItems: 'center',
-  },
-  sendButtonText: {
-    color: '#181818',
-    fontWeight: 'bold',
-    fontSize: 16,
-    alignSelf: 'center',
-    textAlign: 'center'
-
   },
 });
 

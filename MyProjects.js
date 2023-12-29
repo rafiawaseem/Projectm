@@ -18,7 +18,7 @@ const MyProjects = () => {
         const userObject = JSON.parse(storedUserId);
         setClientId(userObject);
         console.log("client id:", userObject.id);
-        const response = await axios.get('http://192.168.5.104:8000/api/project');
+        const response = await axios.get('http://192.168.5.105:8000/api/project');
         console.log(response.data);
         const clientPosts = response.data.filter(post => post.client_id === userObject.id);
         setClientPostsArray(clientPosts);

@@ -5,7 +5,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatScreen = () => {
-  const [builderId, setBuilderId] = useState(); 
+  const [builderId,setbuilderid]=useState('');
   const [clientId, setClientId] = useState();
   const [chats, setChats] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -16,25 +16,31 @@ const ChatScreen = () => {
         const storedUserId = await AsyncStorage.getItem('clientId');
         const userObject = JSON.parse(storedUserId);
         setClientId(userObject.id);
+        const storedbuilderId = await AsyncStorage.getItem('builder');
+        const builderobject = JSON.parse(storedbuilderId);
+        setbuilderid(builderobject);
         console.log("client id:", clientId);
-        const storedBuilderId = await AsyncStorage.getItem('AcceptedBuilderId');
-        const builderObject = JSON.parse(storedBuilderId);
-        setBuilderId(builderObject);
         console.log("Builder id:", builderId);
       } catch (error) {
         console.error('Error fetching client projects:', error);
       }
       // Fetch chats for the user
-      fetchChats();
+      
     };
   
     fetchData();
+  }, []);
+  useEffect(() => {
+    if (clientId && builderId) {
+      fetchChats();
+    }
   }, [clientId, builderId]);
 
   const fetchChats = async () => {
     try {
-      const response = await axios.get(`http://192.168.43.138:8000/api/client/chats/${clientId}`);
+      const response = await axios.get(`http://192.168.5.105:8000/api/client/chats/${clientId}/${builderId}`);
       setChats(response.data);
+      console.log('chats',response.data);
     } catch (error) {
       console.error('Error fetching client chats:', error);
     }
@@ -48,7 +54,7 @@ const ChatScreen = () => {
   const sendMessage =async () => {
     
     try {
-      const response = await axios.post('http://192.168.43.138:8000/api/client/send-message', JSON.stringify(messages),{headers:{
+      const response = await axios.post('http://192.168.5.105:8000/api/client/send-message', JSON.stringify(messages),{headers:{
         'Content-Type': 'application/json',
       }});
       setChats([...chats, response.data]);
