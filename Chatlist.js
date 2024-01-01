@@ -18,7 +18,7 @@ const ChatListScreen = () => {
         console.log("client id:", userObject.id);
   
         const response = await axios.get(
-          `http://192.168.5.105:8000/api/client-chat-list/${userObject.id}`,
+          `http://192.168.206.238:8000/api/client-chat-list/${userObject.id}`,
           {
             headers: {
               'Content-Type': 'application/json',

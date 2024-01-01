@@ -17,9 +17,9 @@ const Bids = () => {
         setpostId(userObject);
 
         // Fetch builder's bids based on builderId
-        const response = await axios.get('http://192.168.5.105:8000/api/bid');
+        const response = await axios.get(`http://192.168.5.102:8000/api/bid`);
         console.log(response.data);
-        const builderPosts = response.data.filter(bids => bids.model_id === userObject);
+        const builderPosts = response.data.filter(bids => bids.model_id === userObject && bids.bid_accepted === 0);
         setBuilderBids(builderPosts);
         console.log("bids", builderBids);
       } catch (error) {
@@ -35,7 +35,7 @@ const Bids = () => {
       // Store builderId in async storage
       await AsyncStorage.setItem('AcceptedId', JSON.stringify(bidId));
       console.log(' ID accepted:', bidId);
-      const response = await axios.post('http://192.168.5.105:8000/api/bid-proposal/accept',
+      const response = await axios.post('http://192.168.5.102:8000/api/bid-proposal/accept',
         { bidProposalId: bidId },
         {
           headers: {

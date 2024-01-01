@@ -35,7 +35,7 @@ const AddBid = () => {
                 model_id: postid,
                 builder_id:builderId ,
             }
-            const response = await axios.post('http://192.168.5.105:8000/api/bid', JSON.stringify(bid),
+            const response = await axios.post('http://192.168.206.238:8000/api/bid', JSON.stringify(bid),
                 {
                     headers: {
                         'Content-Type': 'application/json',
