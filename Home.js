@@ -3,11 +3,15 @@ import { useNavigation } from '@react-navigation/native';
 import { Button, SafeAreaView, View, StyleSheet, ScrollView, TouchableOpacity, Text, useColorScheme, FlatList, Dimensions, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { StatusBar } from 'expo-status-bar';
+import box1 from './assets/box1.png';
+import bid from './assets/bid.png'
+import post from './assets/post.png'
+import proposal from './assets/proposal.png'
 import DrawerNavigator from './DrawerNavigator';
 import { DrawerActions } from '@react-navigation/native';
 export default function HomeScreen() {
   const navigation = useNavigation();
-  const openDrawer=()=>{
+  const openDrawer = () => {
     navigation.dispatch(DrawerActions.openDrawer());
   }
   // const openDrawer = () => {
@@ -20,12 +24,12 @@ export default function HomeScreen() {
     <Icon name="mail" size={25} color={"#ffffff"} onPress={() => navigation.navigate('ChatList')} />,
   ];
   // array of data which are vertically imported in container bellow the slider
-  const imagecontainer = [
-    { key: 'item1', description: 'The three bedroom house plan.' , containerImageSource: require('./assets/plot1.jpg') },
-    { key: 'item2', description: 'The three bedroom house plan', containerImageSource: require('./assets/plot2.jpg') },
-    { key: 'item3', description: 'The two bedroom house plan', containerImageSource: require('./assets/plot3.png') },
-  ];
-  
+  // const imagecontainer = [
+  //   { key: 'item1', description: 'The three bedroom house plan.' , containerImageSource: require('./assets/plot1.jpg') },
+  //   { key: 'item2', description: 'The three bedroom house plan', containerImageSource: require('./assets/plot2.jpg') },
+  //   { key: 'item3', description: 'The two bedroom house plan', containerImageSource: require('./assets/plot3.png') },
+  // ];
+
   function ListCategory() {
     return (
       <View style={styles.categorycontainer}>
@@ -35,12 +39,80 @@ export default function HomeScreen() {
       </View>
     );
   }
+  const EzgifSection = () => {
+    return (
+      <View style={styles.stepContainer}>
+        <View>
+        <Image source={box1} style={{ height: 100, width: 100 , marginLeft:30}} />
+        </View>
+        <View style={{ marginLeft: 15 }}>
+        <Text style={styles.stepText}>Step 01:</Text>
+        <Text style={styles.stepText}>Make 3D Model</Text>
+      </View>
+      </View>
+    );
+  };
+
+  const Step02PostProject = () => {
+    return (
+      <View style={styles.stepContainer}>
+        <View>
+        <Image source={post} style={{ height: 100, width: 100 , marginLeft:30}} />
+        </View>
+        <View>
+        <Text style={styles.stepText}>
+          Step 02:
+        </Text>
+        <Text style={styles.stepText}>
+          Post Project
+        </Text>
+        </View>
+      </View>
+    );
+  };
+
+  const Step03ViewProposals = () => {
+    return (
+      <View style={styles.stepContainer}>
+        <View>
+        <Image source={proposal} style={{ height: 100, width: 100 , marginLeft:30}} />
+        </View>
+        <View>
+        <Text style={styles.stepText}>
+          Step 03:
+        </Text>
+        <Text style={styles.stepText}>
+          View Proposal
+        </Text>
+        </View>
+      </View>
+    );
+  };
+
+  const Step04AcceptBid = () => {
+    return (
+      <View style={styles.stepContainer}>
+        <View>
+        <Image source={bid} style={{ height: 100, width: 100 , marginLeft:30}} />
+        </View>
+        <View>
+        <Text style={styles.stepText}>
+          Step 04:
+        </Text>
+        <Text style={styles.stepText}>
+          View Bids
+        </Text>
+        </View>
+      </View>
+    );
+  };
+
 
   return (
     //header of screen //"#8a2be2" purple 
     <SafeAreaView>
-      <StatusBar translucent={false} backgroundColor={"#8a2be2"} /> 
-      <View style={styles.Header} > 
+      <StatusBar translucent={false} backgroundColor={"#8a2be2"} />
+      <View style={styles.Header} >
         <TouchableOpacity onPress={openDrawer}>
           <Icon
             name="sort" size={28} color="#ffffff"
@@ -51,17 +123,17 @@ export default function HomeScreen() {
           name="notifications-none" size={28} color="#ffffff"
         />
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor:'#363434' }}>
-        <View style={{ backgroundColor: "#8a2be2", height: 120, paddingHorizontal: 20 , borderBottomLeftRadius:20, borderBottomRightRadius:20 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 3 }} style={{ backgroundColor: '#363434'}}>
+        <View style={{ backgroundColor: "#8a2be2", height: 120, paddingHorizontal: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
           <Text style={{ fontSize: 30, color: '#ffffff', fontWeight: 'bold' }}>
-          Your Vision, 
+            Your Vision,
           </Text>
           <Text style={{ fontSize: 30, color: '#ffffff', fontWeight: 'bold' }}>
-          Our Expertise!
+            Our Expertise!
           </Text>
         </View>
         <ListCategory />
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'  }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <FlatList
             data={[
               { key: 'item1', title: 'Item 1', imageSource: require('./assets/img1.jpg') },
@@ -75,7 +147,7 @@ export default function HomeScreen() {
             renderItem={({ item, index }) => (
               <View
                 style={{
-                  marginTop:-60,
+                  marginTop: -60,
                   width: width,
                   height: height / 2,
                   justifyContent: 'center',
@@ -93,11 +165,18 @@ export default function HomeScreen() {
             )}
           />
         </View>
-        <View style={{marginTop:-20}}>
-          <Text style={{fontSize: 30,marginHorizontal: 15,marginTop:-47, color: '#ffffff', fontWeight: 'bold'}} >
-            View Projects:
+        <View style={{ marginTop: -20 }}>
+          <Text style={{ fontSize: 25, marginHorizontal: 15, marginTop: -47, color: '#ffffff', fontWeight: 'bold',alignSelf:'center' }} >
+          WANT TO CONSTRUCT 
           </Text>
-        {imagecontainer.map((item) => (
+          <Text style={{ fontSize: 25, marginHorizontal: 15, marginTop: -5, color: '#ffffff', fontWeight: 'bold',alignSelf:'center' }} >
+          YOUR HOUSE?
+          </Text>
+          <EzgifSection />
+          <Step02PostProject />
+          <Step03ViewProposals />
+          <Step04AcceptBid />
+          {/* {imagecontainer.map((item) => (
         <View style={styles.container} key={item.key}>
           <Image source={item.containerImageSource} style={styles.containerImage} />
           <Text style={styles.containerDescription}>{item.description}</Text>
@@ -105,9 +184,9 @@ export default function HomeScreen() {
             <Text style={styles.buttonText}>View Plan</Text>
             </TouchableOpacity>
             </View>
-             ))}
+             ))} */}
         </View>
-        
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -147,7 +226,7 @@ const styles = StyleSheet.create({
   // Image style (takes the whole space)
   containerImage: {
     width: '100%',
-    height: 175, 
+    height: 175,
     // Adjust the height as needed
     aspectRatio: 16 / 9, // You can adjust the aspect ratio to your preference
     marginVertical: 10, // Adjust the vertical margin
@@ -158,8 +237,8 @@ const styles = StyleSheet.create({
   containerDescription: {
     padding: 14.5,
     fontSize: 18,
-    marginTop:-5,
-    color:'#ffffff',
+    marginTop: -5,
+    color: '#ffffff',
     textAlign: 'left', // You can adjust the text alignment
   },
 
@@ -177,9 +256,27 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#ffffff', // Adjust the text color
   },
+  stepContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#000000', // Background color for the steps container
+    borderRadius: 11,
+    height:170,
+    marginBottom:1,
+    overflow: 'hidden',
+    marginVertical: 10,
+    marginHorizontal: 17,
+  },
+  stepText: {
+    padding: 14.5,
+    fontSize: 20,
+    color: '#ffffff',
+    textAlign: 'left',
+    marginBottom:-15,
+    fontWeight:'bold'
+  },
 });
 
-    // {/* <Button
-    // title="Go to Details"
-    // onPress={() => navigation.navigate('Details')}/> */}
-  
+// {/* <Button
+// title="Go to Details"
+// onPress={() => navigation.navigate('Details')}/> */}

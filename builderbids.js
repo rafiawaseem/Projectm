@@ -16,7 +16,7 @@ const BuilderBids = () => {
         setBuilderId(userObject);
 
         // Fetch builder's bids based on builderId
-        const response = await axios.get(`http://192.168.5.102:8000/api/not-accepted-bids/${userObject.id}`);
+        const response = await axios.get(`http://192.168.5.105:8000/api/not-accepted-bids/${userObject.id}`);
         const builderPosts = response.data.not_accepted_bids
         setBuilderBids(builderPosts);
         console.log("bids", builderBids);
@@ -26,7 +26,7 @@ const BuilderBids = () => {
     };
 
     fetchData();
-  }, [builderId]); 
+  },); 
   return (
     <ScrollView>
       <View>

@@ -38,7 +38,7 @@ const ChatScreen = () => {
 
   const fetchChats = async () => {
     try {
-      const response = await axios.get(`http://192.168.206.238:8000/api/client/chats/${clientId}/${builderId}`);
+      const response = await axios.get(`http://192.168.5.105:8000/api/client/chats/${clientId}/${builderId}`);
       setChats(response.data);
       console.log('chats',response.data);
     } catch (error) {
@@ -54,7 +54,7 @@ const ChatScreen = () => {
   const sendMessage =async () => {
     
     try {
-      const response = await axios.post('http://192.168.206.238:8000/api/client/send-message', JSON.stringify(messages),{headers:{
+      const response = await axios.post('http://192.168.5.105:8000/api/client/send-message', JSON.stringify(messages),{headers:{
         'Content-Type': 'application/json',
       }});
       setChats([...chats, response.data]);

@@ -32,7 +32,7 @@ const Bchat = () => {
 
   const fetchChats = async () => {
     try {
-      const response = await axios.get(`http://192.168.206.238:8000/api/builder/chats/${builderId}/${clientId}`);
+      const response = await axios.get(`http://192.168.5.105:8000/api/builder/chats/${builderId}/${clientId}`);
       setChats(response.data);
     } catch (error) {
       console.error('Error fetching builder chats:', error);
@@ -47,7 +47,7 @@ const Bchat = () => {
   const sendMessage =async () => {
     
     try {
-      const response = await axios.post('http://192.168.206.238:8000/api/builder/send-message', JSON.stringify(messages),{headers:{
+      const response = await axios.post('http://192.168.5.105:8000/api/builder/send-message', JSON.stringify(messages),{headers:{
         'Content-Type': 'application/json',
       }});
       setChats([...chats, response.data]);

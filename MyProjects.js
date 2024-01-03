@@ -18,7 +18,7 @@ const MyProjects = () => {
         const userObject = JSON.parse(storedUserId);
         setClientId(userObject);
         console.log("client id:", userObject.id);
-        const response = await axios.get(`http://192.168.5.102:8000/api/projects/not-accepted/${userObject.id}`);
+        const response = await axios.get(`http://192.168.5.105:8000/api/projects/not-accepted/${userObject.id}`);
         const clientPosts = response.data.projects_not_accepted;
         setClientPostsArray(clientPosts);
         console.log("client array", clientPostsArray)
