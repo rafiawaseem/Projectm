@@ -24,11 +24,16 @@ const Bchat = () => {
         console.error('Error fetching builder projects:', error);
       }
       // Fetch chats for the user
-      fetchChats();
     };
   
     fetchData();
+  }, []);
+  useEffect(() => {
+    if (clientId && builderId) {
+      fetchChats();
+    }
   }, [clientId, builderId]);
+
 
   const fetchChats = async () => {
     try {
@@ -72,7 +77,7 @@ const Bchat = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={isSender(item) ? styles.senderMessage : styles.receiverMessage}>
-            <Text>{item.message_content}</Text>
+            <Text style={{color:'white'}}>{item.message_content}</Text>
           </View>
         )}
       />
@@ -80,6 +85,7 @@ const Bchat = () => {
         <TextInput
           style={styles.input}
           placeholder="Type your message..."
+          placeholderTextColor="white"
           value={newMessage}
           onChangeText={(text) => setNewMessage(text)}
         />
@@ -96,14 +102,14 @@ const styles = StyleSheet.create({
   },
   senderMessage: {
     alignSelf: 'flex-end',
-    backgroundColor: '#99ccff', // Sender's message color
+    backgroundColor: '#181818', // Sender's message color
     padding: 10,
     marginVertical: 5,
     borderRadius: 8,
   },
   receiverMessage: {
     alignSelf: 'flex-start',
-    backgroundColor: '#e6e6e6', // Receiver's message color
+    backgroundColor: '#8a2be2', // Receiver's message color
     padding: 10,
     marginVertical: 5,
     borderRadius: 8,
@@ -117,7 +123,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     padding: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'white',
     borderRadius: 8,
   },
 });

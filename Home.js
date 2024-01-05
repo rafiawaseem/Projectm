@@ -176,15 +176,6 @@ export default function HomeScreen() {
           <Step02PostProject />
           <Step03ViewProposals />
           <Step04AcceptBid />
-          {/* {imagecontainer.map((item) => (
-        <View style={styles.container} key={item.key}>
-          <Image source={item.containerImageSource} style={styles.containerImage} />
-          <Text style={styles.containerDescription}>{item.description}</Text>
-          <TouchableOpacity style={styles.containerButton}>
-            <Text style={styles.buttonText}>View Plan</Text>
-            </TouchableOpacity>
-            </View>
-             ))} */}
         </View>
 
       </ScrollView>

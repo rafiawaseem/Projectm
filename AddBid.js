@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import BuilderBids from './builderbids'; // Import the BuilderBids component
 import { useNavigation } from '@react-navigation/native';
-const AddBid = () => {
+export default function AddBid () {
     const navigation = useNavigation();
     const [builderId, setBuilderId] = useState();
     const [Proposal, setProposal] = useState('');
@@ -16,7 +15,7 @@ const AddBid = () => {
             try {
                 const storedUserId = await AsyncStorage.getItem('builderId');
                 const userObject = JSON.parse(storedUserId);
-                setBuilderId(userObject);
+                setBuilderId(userObject.id);
                 const storedPostId = await AsyncStorage.getItem('PostId');
                 const postObject = JSON.parse(storedPostId);
                 setpostid(postObject);
@@ -31,16 +30,13 @@ const AddBid = () => {
         try {
             const bid = {
                 proposal: Proposal,
-                bid_price: parseInt(price),
+                bid_price: parseFloat(price),
                 model_id: postid,
                 builder_id:builderId ,
+                bid_accepted:0,
             }
-            const response = await axios.post('http://192.168.5.105:8000/api/bid', JSON.stringify(bid),
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
+            console.log("bid", bid)
+            const response = await axios.post(`http://192.168.5.105:8000/api/bidstore`, bid)
             console.log(response.data); // Log the response from the server
             // Close the BidForm and navigate to BuilderBids
             await AsyncStorage.removeItem('PostId');
@@ -137,4 +133,3 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
 });
-export default AddBid;

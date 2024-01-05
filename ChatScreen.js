@@ -79,14 +79,15 @@ const ChatScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={isSender(item) ? styles.senderMessage : styles.receiverMessage}>
-            <Text>{item.message_content}</Text>
+            <Text style={{color:'white'}}>{item.message_content}</Text>
           </View>
         )}
       />
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, {color:'white'}]}
           placeholder="Type your message..."
+          placeholderTextColor="white"
           value={newMessage}
           onChangeText={(text) => setNewMessage(text)}
         />
@@ -103,14 +104,14 @@ const styles = StyleSheet.create({
   },
   senderMessage: {
     alignSelf: 'flex-end',
-    backgroundColor: '#99ccff', // Sender's message color
+    backgroundColor: '#181818', // Sender's message color
     padding: 10,
     marginVertical: 5,
     borderRadius: 8,
   },
   receiverMessage: {
     alignSelf: 'flex-start',
-    backgroundColor: '#e6e6e6', // Receiver's message color
+    backgroundColor: '#8a2be2', // Receiver's message color
     padding: 10,
     marginVertical: 5,
     borderRadius: 8,
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     padding: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'white',
     borderRadius: 8,
   },
 });

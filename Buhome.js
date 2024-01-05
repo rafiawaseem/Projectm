@@ -4,7 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 import { Button, SafeAreaView, View, StyleSheet, ScrollView, TouchableOpacity, Text, useColorScheme, FlatList, Dimensions, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { StatusBar } from 'expo-status-bar';
-
+import bid from './assets/bid.png'
+import chat from './assets/chat.png'
+import proposal from './assets/proposal.png'
 export default function Buhome() {
   const navigation = useNavigation();
   const { height, width } = Dimensions.get('window');
@@ -24,12 +26,6 @@ export default function Buhome() {
 
   };
   // array of data which are vertically imported in container bellow the slider
-  const icontainer = [
-    { key: 'item1', description: 'The three bedroom house plan.' , containerImageSource: require('./assets/plot1.jpg') },
-    { key: 'item2', description: 'The three bedroom house plan', containerImageSource: require('./assets/plot2.jpg') },
-    { key: 'item3', description: 'The two bedroom house plan', containerImageSource: require('./assets/plot3.png') },
-  ];
-  
   function List() {
     return (                                                                                                                                                                                                                                              
       <View style={styles.categorycontainer}>
@@ -39,6 +35,59 @@ export default function Buhome() {
       </View>
     );
   }
+
+  const Step01ViewProposals = () => {
+    return (
+      <View style={styles.stepContainer}>
+        <View>
+        <Image source={proposal} style={{ height: 100, width: 100 , marginLeft:30}} />
+        </View>
+        <View>
+        <Text style={styles.stepText}>
+          Step 01:
+        </Text>
+        <Text style={styles.stepText}>
+          View Proposal
+        </Text>
+        </View>
+      </View>
+    );
+  };
+
+  const Step02Bid = () => {
+    return (
+      <View style={styles.stepContainer}>
+        <View>
+        <Image source={bid} style={{ height: 100, width: 100 , marginLeft:30}} />
+        </View>
+        <View>
+        <Text style={styles.stepText}>
+          Step 02:
+        </Text>
+        <Text style={styles.stepText}>
+          Start Bidding
+        </Text>
+        </View>
+      </View>
+    );
+  };
+  const Step03Chat = () => {
+    return (
+      <View style={styles.stepContainer}>
+        <View>
+        <Image source={chat} style={{ height: 100, width: 100 , marginLeft:30}} />
+        </View>
+        <View>
+        <Text style={styles.stepText}>
+          Step 03:
+        </Text>
+        <Text style={styles.stepText}>
+          Chat with Client
+        </Text>
+        </View>
+      </View>
+    );
+  };
   return (
     //header of screen //"#8a2be2" purple 
     <SafeAreaView>
@@ -98,19 +147,16 @@ export default function Buhome() {
             )}
           />
         </View>
-        <View style={{marginTop:-20}}>
-          <Text style={{fontSize: 30,marginHorizontal: 15,marginTop:-47, color: '#ffffff', fontWeight: 'bold'}} >
-            View Projects:
+        <View style={{ marginTop: -20 }}>
+          <Text style={{ fontSize: 25, marginHorizontal: 15, marginTop: -47, color: '#ffffff', fontWeight: 'bold',alignSelf:'center' }} >
+          WANT TO Know 
           </Text>
-        {icontainer.map((item) => (
-        <View style={styles.container} key={item.key}>
-          <Image source={item.containerImageSource} style={styles.containerImage} />
-          <Text style={styles.containerDescription}>{item.description}</Text>
-          <TouchableOpacity style={styles.containerButton}>
-            <Text style={styles.buttonText}>Bid Now</Text>
-            </TouchableOpacity>
-            </View>
-             ))}
+          <Text style={{ fontSize: 25, marginHorizontal: 15, marginTop: -5, color: '#ffffff', fontWeight: 'bold',alignSelf:'center' }} >
+          HOW THIS WORKS?
+          </Text>
+          <Step01ViewProposals />
+          <Step02Bid />
+          <Step03Chat/>
         </View>
         
       </ScrollView>
@@ -181,5 +227,24 @@ const styles = StyleSheet.create({
   // Button text style
   buttonText: {
     color: '#ffffff', // Adjust the text color
+  },
+  stepContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#000000', // Background color for the steps container
+    borderRadius: 11,
+    height:170,
+    marginBottom:1,
+    overflow: 'hidden',
+    marginVertical: 10,
+    marginHorizontal: 17,
+  },
+  stepText: {
+    padding: 14.5,
+    fontSize: 20,
+    color: '#ffffff',
+    textAlign: 'left',
+    marginBottom:-15,
+    fontWeight:'bold'
   },
 });

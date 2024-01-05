@@ -68,8 +68,8 @@ const Bids = () => {
                 <Text style={styles.bidProperty}>{`Bid Price: ${bid.bid_price}`}</Text>
                 <Text style={styles.bidProperty}>{`Post ID: ${bid.model_id}`}</Text>
                 <Text style={styles.bidProperty}>{`Date: ${bid.created_at}`}</Text>
-                <TouchableOpacity onPress={() => handleAcceptBid(bid.id)}>
-                  <Text style={styles.acceptBidButton}>Accept Bid</Text>
+                <TouchableOpacity onPress={() => handleAcceptBid(bid.id)} style={styles.acceptBidButton}>
+                <Text style={styles.acceptBidButtonText}>Accept Bid</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     marginHorizontal:5,
     marginTop:10,
     padding: 8,
-    height: 95, // Adjust the height as needed
+    height: 130, // Adjust the height as needed
     marginBottom: 15,
     alignItems: 'center',
     shadowColor: 'white',
@@ -131,12 +131,18 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   acceptBidButton: {
-    fontSize: 16,
-    color: 'green',
+    backgroundColor: '#181818', // Add the desired background color
+    padding: 5, // Add padding as needed
+    borderRadius: 8, // Add borderRadius as needed
     marginTop: 5,
-    textDecorationLine: 'underline',
-    // Add any other styles you want for the button
+    height:30,
+    width:110,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  acceptBidButtonText: {
+    fontSize: 16,
+    color: '#ffffff',}
 });
 
 
