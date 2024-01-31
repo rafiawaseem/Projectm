@@ -7,8 +7,13 @@ import { StatusBar } from 'expo-status-bar';
 import bid from './assets/bid.png'
 import chat from './assets/chat.png'
 import proposal from './assets/proposal.png'
+import { DrawerActions } from '@react-navigation/native';
+
 export default function Buhome() {
-  const navigation = useNavigation();
+    const navigation = useNavigation();
+    const openDrawer = () => {
+      navigation.dispatch(DrawerActions.openDrawer());
+    }
   const { height, width } = Dimensions.get('window');
   const icons = [
     <Icon name="attach-money" size={25} color={"#ffffff"} onPress={() => navigation.navigate('ViewPlans')} />,
@@ -93,14 +98,14 @@ export default function Buhome() {
     <SafeAreaView>
       <StatusBar translucent={false} backgroundColor={"#8a2be2"} /> 
       <View style={styles.Header} > 
-        <TouchableOpacity onPress={''}>
+        <TouchableOpacity onPress={openDrawer}>
           <Icon
             name="sort" size={28} color="#ffffff"
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleSignout}>
         <Icon
-          name="notifications-none" size={28} color="#ffffff"
+          name="exit-to-app" size={28} color="#ffffff"
         />
         </TouchableOpacity>
         

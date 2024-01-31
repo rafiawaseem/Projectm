@@ -3,32 +3,27 @@ import { ScrollView } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import LottieView from 'lottie-react-native';
 
-const MyProjects = () => {
-  const [loading, setLoading] = useState(false);
-  const navigation = useNavigation();
-  const [selectedPostId, setSelectedPostId] = useState(null);
+export default function AcceptedProjects() {
+    const navigation=useNavigation();
+  const [selectedPostId, setSelectedPostId] = useState(null); 
   const [clientId, setClientId] = useState('');
   const [clientPostsArray, setClientPostsArray] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true)
         const storedUserId = await AsyncStorage.getItem('clientId');
         const userObject = JSON.parse(storedUserId);
         setClientId(userObject);
         console.log("client id:", userObject.id);
-        const response = await axios.get(`http://192.168.43.138:8000/api/projects/not-accepted/${userObject.id}`);
-        const clientPosts = response.data.projects_not_accepted;
+        const response = await axios.get(`http://192.168.43.138:8000/api/projects/accepted/${userObject.id}`);
+        const clientPosts = response.data.projects_accepted;
         setClientPostsArray(clientPosts);
         console.log("client array", clientPostsArray)
       } catch (error) {
         console.error('Error fetching client projects:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -37,26 +32,27 @@ const MyProjects = () => {
 
   const handleBidNow = (postId) => {
     // Set the selected post ID and navigate to BidForm
-    setSelectedPostId(postId);
-
-    // Log the post ID inside a callback function
-    setSelectedPostId(async (newId) => {
-      console.log("postid:", newId);
-      AsyncStorage.setItem('PostId', JSON.stringify(newId));
-      const storedId = await AsyncStorage.getItem('PostId');
-      console.log('Post ID stored successfully. Stored ID:', storedId);
-      navigation.navigate('Bids');
-
-    });
-
-
-  };
+   setSelectedPostId(postId);
+ 
+   // Log the post ID inside a callback function
+   setSelectedPostId(async (newId) => {
+     console.log("postid:", newId);
+     AsyncStorage.setItem('PostId', JSON.stringify(newId));
+     const storedId = await AsyncStorage.getItem('PostId');
+     console.log('Post ID stored successfully. Stored ID:', storedId);
+     navigation.navigate('Bids');
+ 
+   });
+ 
+   // Navigate to the 'AddBid' screen
+   
+   };
 
   // Properties to exclude from display
   const excludedProperties = ['model_file', 'updated_at', 'client_id', 'bid_count'];
 
   return (
-      <ScrollView>
+    <ScrollView>
       <View style={styles.container}>
         {clientPostsArray.map((post, index) => (
           <View key={index}
@@ -70,57 +66,18 @@ const MyProjects = () => {
               )
             ))}
             
-            <TouchableOpacity style={styles.containerButton} onPress={() => handleBidNow(post.id)}>
-              <Text style={styles.bidNowButton}>
-                View Bids
-              </Text>
-            </TouchableOpacity>
           </View>
         ))}
 
       </View>
-      {loading && (
-  <View style={styles.loaderContainer}>
-    <View style={styles.loaderCircle}>
-      <LottieView
-        source={require('./assets/Animation - 1705585934337.json')}
-        autoPlay
-        loop
-      />
-    </View>
-  </View>
-)}
-      
     </ScrollView>
-    
-    
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 10,
-  },
-  loaderContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex:999,
-  },
-  loaderCircle: {
-    height:100,
-    width:100,
-    marginTop:180,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Transparent background
-    borderRadius: 80, // Half of the width/height to make it a circle
-    padding: 20, // Adjust as needed
-    elevation: 5, // Add some elevation for Android shadow
   },
   postContainer: {
     color: '#ffffff',
@@ -145,20 +102,21 @@ const styles = StyleSheet.create({
     marginBottom: -12
   },
   bidNowButton: {
-    color: '#ffffff',
+    color: '#ffffff',    
   },
   containerButton: {
     position: 'relative',
+    // bottom: 12,
     left: 215,
-    backgroundColor: '#8a2be2',
+    backgroundColor: '#8a2be2', // Adjust the button style
     paddingVertical: 11,
-    paddingHorizontal: 11,
-    height: 40,
-    width: 80,
-    justifySelf: 'center',
+    paddingHorizontal:11,
+    height:40,
+    width:80,
+    justifyself:'center',
     borderRadius: 5,
   },
 });
 
 
-export default MyProjects;
+

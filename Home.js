@@ -7,13 +7,22 @@ import box1 from './assets/box1.png';
 import bid from './assets/bid.png'
 import post from './assets/post.png'
 import proposal from './assets/proposal.png'
-import DrawerNavigator from './DrawerNavigator';
 import { DrawerActions } from '@react-navigation/native';
 export default function HomeScreen() {
   const navigation = useNavigation();
   const openDrawer = () => {
     navigation.dispatch(DrawerActions.openDrawer());
   }
+  const handleSignout = async () => {
+    // Clear user information from AsyncStorage
+    try{
+      await AsyncStorage.removeItem('clientId');
+      navigation.navigate('Login')
+    }catch (error) {
+      console.error('Error signing out', error);
+    }
+
+  };
   // const openDrawer = () => {
   //   navigation.openDrawer(); // Open the drawer
   // };
@@ -119,9 +128,9 @@ export default function HomeScreen() {
           />
         </TouchableOpacity>
 
-        <Icon
-          name="notifications-none" size={28} color="#ffffff"
-        />
+        <TouchableOpacity onPress={handleSignout}>
+          <Icon name="exit-to-app" size={28} color="#ffffff" />
+          </TouchableOpacity>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 3 }} style={{ backgroundColor: '#363434'}}>
         <View style={{ backgroundColor: "#8a2be2", height: 120, paddingHorizontal: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>

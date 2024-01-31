@@ -1,13 +1,12 @@
-// DrawerNavigator.js
 import React from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import HomeScreen from './Home';
 import ChatListScreen from './Chatlist';
-import BidDashboard from './PostProj';
 import MyProjects from './MyProjects';
 import UserProfile from './UserProfile';
 import PostProject from './PostProj';
 import Signout from './signout';
+import AcceptedProjects from './AcceptedProjects';
 
 const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
@@ -20,15 +19,16 @@ const DrawerNavigator = () => {
          // Set drawer background color with opacity
       },
       drawerLabelStyle: {
-        fontSize: 30, // Set the font size for screen names
+        fontSize: 25, // Set the font size for screen names
         color: '#8a2be2', // Set the color for screen names
       },
     }}
   >
-      <Drawer.Screen name="Home" component={HomeScreen} options={{headerShown:false, headerStyle:{backgroundColor:'#8a2be2'}}} />
-      <Drawer.Screen name="ChatList" component={ChatListScreen} options={{headerStyle:{backgroundColor:'#8a2be2'}}}/>
+      <Drawer.Screen name="My Home" component={HomeScreen} options={{headerShown:false, headerStyle:{backgroundColor:'#8a2be2'}}} />
       <Drawer.Screen name="Post Project" component={PostProject} options={{headerStyle:{backgroundColor:'#8a2be2'}}}/>
       <Drawer.Screen name="Projects" component={MyProjects} options={{headerStyle:{backgroundColor:'#8a2be2'}}}/>
+      <Drawer.Screen name="Approved Projects" component={AcceptedProjects} options={{headerStyle:{backgroundColor:'#8a2be2'}}}/>
+      <Drawer.Screen name="ChatScreen" component={ChatListScreen} options={{headerStyle:{backgroundColor:'#8a2be2'}}}/>
       <Drawer.Screen name='UProfile' component={UserProfile} options={{headerStyle:{backgroundColor:'#8a2be2'}}}/>
       <Drawer.Screen name='Signout' component={Signout} options={{ headerShown: false }}/>
       {/* Add other screens for the drawer */}

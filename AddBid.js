@@ -36,11 +36,11 @@ export default function AddBid () {
                 bid_accepted:0,
             }
             console.log("bid", bid)
-            const response = await axios.post(`http://192.168.5.105:8000/api/bidstore`, bid)
+            const response = await axios.post(`http://192.168.43.138:8000/api/bidstore`, bid)
             console.log(response.data); // Log the response from the server
             // Close the BidForm and navigate to BuilderBids
             await AsyncStorage.removeItem('PostId');
-            navigation.navigate('Builderbids');
+            navigation.navigate('My Bids');
         } catch (error) {
             console.error('Error submitting bid:', error);
         }

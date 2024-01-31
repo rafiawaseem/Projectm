@@ -15,7 +15,7 @@ export default function BList() {
         setBuilderId(userObject.id);
   
         const response = await axios.get(
-          `http://192.168.5.105:8000/api/builder-chat-list/${userObject.id}`,
+          `http://192.168.43.138:8000/api/builder-chat-list/${userObject.id}`,
           {
             headers: {
               'Content-Type': 'application/json',

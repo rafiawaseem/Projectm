@@ -4,8 +4,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import profile from './assets/profile.jpg';
 
-const BuilderBids = () => {
-  const [builderId, setBuilderId] = useState('');
+export default function AcceptedBids() {
+ const [builderId, setBuilderId] = useState('');
   const [builderBids, setBuilderBids] = useState([]);
 
   useEffect(() => {
@@ -16,8 +16,8 @@ const BuilderBids = () => {
         setBuilderId(userObject);
 
         // Fetch builder's bids based on builderId
-        const response = await axios.get(`http://192.168.43.138:8000/api/not-accepted-bids/${userObject.id}`);
-        const builderPosts = response.data.not_accepted_bids
+        const response = await axios.get(`http://192.168.43.138:8000/api/accepted-bids/${userObject.id}`);
+        const builderPosts = response.data.accepted_bids
         setBuilderBids(builderPosts);
         console.log("bids", builderBids);
       } catch (error) {
@@ -106,4 +106,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BuilderBids;

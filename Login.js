@@ -3,22 +3,34 @@ import { useNavigation } from '@react-navigation/native';
 import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity,ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
+import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Login(){
 const [email, setemail] = useState('');
 const [password, setPassword] = useState('');
 const [errorMessage, setErrorMessage] = useState('');
+const [loading, setLoading] = useState(false);
 const navigation = useNavigation();
 // const [userType, setUserType] = useState('client'); // Default to 'client'
 const [selectedButton, setSelectedButton] = useState(null);//for button selection
 const handleButtonPress=(buttonName)=>{
   setSelectedButton(buttonName);
 }
+const validateEmail = (email) => {
+  // Basic email validation using regular expression
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
   const handleLogin = async() => {
+    if (!validateEmail(email)) {
+      setErrorMessage('Invalid email');
+      return;
+    }
     // Conditionally make API call based on the selected button
     if (selectedButton === 'button1') {
       try {
-        const apiUrl = 'http://192.168.5.105:8000/api/client/login';  // Replace with your actual API URL
+        setLoading(true);
+        const apiUrl = 'http://192.168.43.138:8000/api/client/login';  // Replace with your actual API URL
         const response = await axios.post(apiUrl, {
           email: email,
           password: password,
@@ -31,11 +43,14 @@ const handleButtonPress=(buttonName)=>{
         navigation.navigate('MHome');
       } catch (error) {
         console.error('API Error:', error);
+      }finally {
+        setLoading(false); 
       }
       
     } else if (selectedButton === 'button2') {
       try {
-        const apiUrl = 'http://192.168.5.105:8000/api/builder/login';  // Replace with your actual API URL
+        setLoading(true);
+        const apiUrl = 'http://192.168.43.138:8000/api/builder/login';  // Replace with your actual API URL
         const response = await axios.post(apiUrl, {
           email: email,
           password: password,
@@ -46,9 +61,11 @@ const handleButtonPress=(buttonName)=>{
         const storedId = await AsyncStorage.getItem('builderId');
         // Log the stored ID directly in the console
         console.log('Builder ID stored successfully. Stored ID:', storedId);
-        navigation.navigate('BHome');
+        navigation.navigate('BuilderHome');
       } catch (error) {
         console.error('API Error:', error);
+      }finally {
+        setLoading(false); 
       }
     }
 
@@ -114,6 +131,17 @@ const handleButtonPress=(buttonName)=>{
         <Text style={styles.errorMessage}>{errorMessage}</Text>
       </View>
     </View>
+    {loading && (
+  <View style={styles.loaderContainer}>
+    <View style={styles.loaderCircle}>
+      <LottieView
+        source={require('./assets/Animation - 1705585934337.json')}
+        autoPlay
+        loop
+      />
+    </View>
+  </View>
+)}
     </ScrollView>
     
   );
@@ -125,6 +153,22 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  loaderContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 999,
+  },
+  loaderCircle: {
+    height:100,
+    width:100,
+    marginTop:180,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Transparent background
+    borderRadius: 80, // Half of the width/height to make it a circle
+    padding: 20, // Adjust as needed
+    elevation: 5, // Add some elevation for Android shadow
   },
   loginContainer: {
     width: '80%',
@@ -188,31 +232,3 @@ const styles = StyleSheet.create({
 });
 
 
-// const handleRegister = async () => {
-//   try {
-//     let registeredUserType = null; // Initialize the user type variable
-
-//     // Check if the username is 'user' and the password is 'password'
-//     if (username === 'user' && password === 'password') {
-//       registeredUserType = 'client'; // Set user type to 'client' for valid credentials
-//     } else {
-//       registeredUserType = userType; // Use the selected user type for other cases
-//     }
-
-//     // Create a new user account with Firebase Authentication
-//     const userCredential = await firebase.auth().createUserWithEmailAndPassword(username, password);
-//     const user = userCredential.user;
-
-//     // Store user type in Firebase Firestore
-//     const db = firebase.firestore();
-//     await db.collection('users').doc(user.uid).set({
-//       userType: registeredUserType, // Store the user type (either 'client' or 'builder')
-//     });
-
-//     console.log('Registration successful');
-//     navigation.navigate('Home'); // Navigate to the home screen after successful registration
-//   } catch (error) {
-//     setErrorMessage('Registration failed. Please try again.'); // Handle error messages as needed
-//     console.error('Registration Error:', error);
-//   }
-// };

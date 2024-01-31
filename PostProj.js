@@ -46,7 +46,7 @@ export default function PostProject() {
       return;
     }
     console.log(projectData)
-    await axios.post('http://192.168.5.105:8000/api/project', JSON.stringify(projectData), 
+    await axios.post('http://192.168.43.138:8000/api/project', JSON.stringify(projectData), 
     {headers:{
       'Content-Type': 'application/json',
     }})
