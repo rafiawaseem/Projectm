@@ -18,7 +18,7 @@ export default function AcceptedProjects() {
         const userObject = JSON.parse(storedUserId);
         setClientId(userObject);
         console.log("client id:", userObject.id);
-        const response = await axios.get(`http://192.168.43.138:8000/api/projects/accepted/${userObject.id}`);
+        const response = await axios.get(`https://estihomebidder.com/api/projects/accepted/${userObject.id}`);
         const clientPosts = response.data.projects_accepted;
         setClientPostsArray(clientPosts);
         console.log("client array", clientPostsArray)

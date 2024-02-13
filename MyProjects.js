@@ -21,12 +21,14 @@ const MyProjects = () => {
         const userObject = JSON.parse(storedUserId);
         setClientId(userObject);
         console.log("client id:", userObject.id);
-        const response = await axios.get(`http://192.168.43.138:8000/api/projects/not-accepted/${userObject.id}`);
+        const response = await axios.get(`https://estihomebidder.com/api/projects/not-accepted/${userObject.id}`);
         const clientPosts = response.data.projects_not_accepted;
         setClientPostsArray(clientPosts);
         console.log("client array", clientPostsArray)
       } catch (error) {
         console.error('Error fetching client projects:', error);
+        console.error('Error response:', error.response); // Log the detailed error response
+
       } finally {
         setLoading(false);
       }

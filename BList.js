@@ -15,7 +15,7 @@ export default function BList() {
         setBuilderId(userObject.id);
   
         const response = await axios.get(
-          `http://192.168.43.138:8000/api/builder-chat-list/${userObject.id}`,
+          `https://estihomebidder.com/api/builder-chat-list/${userObject.id}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -24,9 +24,13 @@ export default function BList() {
         );
         console.log("builder id:", );
 
-        console.log(response.data);
-        setClients(response.data);
-
+        console.log(response.data.clientInfo);
+         // Convert the object into an array of objects
+         const clientsArray = Object.keys(response.data.clientInfo).map(id => ({
+          id: parseInt(id),
+          username: response.data.clientInfo[id],
+        }));
+        setClients(clientsArray);
       } catch (error) {
         console.error('Error getting chat list:', error);
       }
@@ -52,11 +56,11 @@ export default function BList() {
    })}
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => Handlepress(item.client.id)}>
+    <TouchableOpacity onPress={() => Handlepress(item.id)}>
       <View style={styles.itemContainer}>
         <View style={styles.itemTextContainer}>
-        <Text style={styles.itemDescription}>{`Client ID: ${item.client.id}`}</Text>
-        <Text style={styles.itemTitle}>{`Username: ${item.client.username}`}</Text>
+        <Text style={styles.itemDescription}>{`Client ID: ${item.id}`}</Text>
+        <Text style={styles.itemTitle}>{`Username: ${item.username}`}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -65,7 +69,7 @@ export default function BList() {
   return (
     <FlatList
       data={clients}
-      keyExtractor={(item) => item.client.id.toString()}
+      keyExtractor={(item) => item.id}
       renderItem={renderItem}
       contentContainerStyle={styles.container}
     />

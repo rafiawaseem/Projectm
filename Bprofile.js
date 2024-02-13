@@ -1,30 +1,51 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, SafeAreaView } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Bprofile({ user }) {
+export default function Bprofile() {
 
-  const myImage = require('./assets/profile.jpg');
+  const [builderData, setBuilderData] = useState(null);
+
+  useEffect(() => {
+    const fetchBuilderData = async () => {
+      try {
+        // Fetch the stored client ID from AsyncStorage
+        const storedBuilderId = await AsyncStorage.getItem('builderId');
+        const builderId = JSON.parse(storedBuilderId).id;
+
+        // Fetch client data from the API using the client ID
+        const response = await axios.get(`http://192.168.5.101:8000/api/builder/${builderId}`);
+        setBuilderData(response.data.builder);
+        console.log('builder data', builderData)
+      } catch (error) {
+        console.error('Error fetching builder data:', error);
+      }
+    };
+
+    fetchBuilderData();
+  }, []);
+
   return (
-    <ScrollView style={{ backgroundColor: '#363434', marginLeft: 20, marginRight: 20,flexDirection: 'column',
-    marginTop:25, flex: 1, }}>
-        <View style={styles.imageContainer}>
-        <Image
-        style={styles.profileImage}
-        source = {myImage}
-      />
-        </View>
-      
-      <View style={styles.detailsContainer}>
-        <Text style={styles.name}>User</Text>
-        <Text style={styles.email}>user@gmail.com</Text>
-        <Text style={styles.phoneNumber}>022166232</Text>
-        <Text style={styles.address}>
-            Robert Robertson, 
-                     1234 NW Bobcat Lane, St. Robert, MO 65584-5678.</Text>
-      </View>    
+    <ScrollView style={styles.container}>
+      {builderData && (
+        <>
+          <View style={styles.imageContainer}>
+            <Image
+              style={styles.profileImage}
+              source={require('./assets/profile.jpg')}
+            />
+          </View>
+
+          <View style={styles.detailsContainer}>
+            <Text style={styles.name}>{builderData.username}</Text>
+            <Text style={styles.email}>{builderData.email}</Text>
+            <Text style={styles.phoneNumber}>{builderData.phone_number}</Text>
+            <Text style={styles.address}>{builderData.address}</Text>
+          </View>
+        </>
+      )}
     </ScrollView>
-     
   );
 };
 

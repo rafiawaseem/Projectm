@@ -37,16 +37,13 @@ export default function PostProject() {
     bid_count: 0, // or any default value you want to set
   };
   
-
-
-
   const handleSubmit = async () => {
     if (!postTitle || !proposalDescription || !house_area || !house_location) {
       alert('Project title and description are required.');
       return;
     }
     console.log(projectData)
-    await axios.post('http://192.168.43.138:8000/api/project', JSON.stringify(projectData), 
+    await axios.post('https://estihomebidder.com/api/project', JSON.stringify(projectData), 
     {headers:{
       'Content-Type': 'application/json',
     }})

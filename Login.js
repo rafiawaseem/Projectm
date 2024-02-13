@@ -21,16 +21,22 @@ const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
+const handleEmailChange= (NewEmail) =>{
+      // Update the error message dynamically as the user types
+      if (NewEmail && !validateEmail(NewEmail)){
+        setErrorMessage("Invalid Email");
+      }else {
+        setErrorMessage('');
+      }
+  
+      setemail(NewEmail);
+}
   const handleLogin = async() => {
-    if (!validateEmail(email)) {
-      setErrorMessage('Invalid email');
-      return;
-    }
     // Conditionally make API call based on the selected button
     if (selectedButton === 'button1') {
       try {
         setLoading(true);
-        const apiUrl = 'http://192.168.43.138:8000/api/client/login';  // Replace with your actual API URL
+        const apiUrl = 'https://estihomebidder.com/api/client/login';  // Replace with your actual API URL
         const response = await axios.post(apiUrl, {
           email: email,
           password: password,
@@ -50,7 +56,7 @@ const validateEmail = (email) => {
     } else if (selectedButton === 'button2') {
       try {
         setLoading(true);
-        const apiUrl = 'http://192.168.43.138:8000/api/builder/login';  // Replace with your actual API URL
+        const apiUrl = 'https://estihomebidder.com/api/builder/login';  // Replace with your actual API URL
         const response = await axios.post(apiUrl, {
           email: email,
           password: password,
@@ -64,6 +70,8 @@ const validateEmail = (email) => {
         navigation.navigate('BuilderHome');
       } catch (error) {
         console.error('API Error:', error);
+        console.error('Error response:', error.response); // Log the detailed error response
+
       }finally {
         setLoading(false); 
       }
@@ -113,7 +121,7 @@ const validateEmail = (email) => {
           placeholder="Email"
           placeholderTextColor="#ffffff"
           value={email}
-          onChangeText={setemail}
+          onChangeText={handleEmailChange}
         />
         <TextInput
           style={styles.input}

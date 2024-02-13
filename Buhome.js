@@ -17,7 +17,7 @@ export default function Buhome() {
   const { height, width } = Dimensions.get('window');
   const icons = [
     <Icon name="attach-money" size={25} color={"#ffffff"} onPress={() => navigation.navigate('ViewPlans')} />,
-    <Icon name="dns" size={25} color={"#ffffff"} onPress={() => navigation.navigate('Builderbids')} />,
+    <Icon name="dns" size={25} color={"#ffffff"} onPress={() => navigation.navigate('My Bids')} />,
     <Icon name="mail" size={25} color={"#ffffff"} onPress={() => navigation.navigate('ChatHome')} />,
   ];
   const handleSignout = async () => {

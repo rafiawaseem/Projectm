@@ -1,16 +1,17 @@
 
-import React, { useState, useEffect } from 'react';
-import { View, FlatList, TextInput, Button, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect,useCallback } from 'react';
+import { View, FlatList, TextInput, Button, Text, StyleSheet,RefreshControl } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatScreen = () => {
-  const [builderId,setbuilderid]=useState('');
+  const [builderId, setbuilderid] = useState('');
   const [clientId, setClientId] = useState();
   const [chats, setChats] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect( () => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const storedUserId = await AsyncStorage.getItem('clientId');
@@ -25,38 +26,51 @@ const ChatScreen = () => {
         console.error('Error fetching client projects:', error);
       }
       // Fetch chats for the user
-      
     };
-  
     fetchData();
   }, []);
+
+  //if client id and builder id fetched call fetchchats
   useEffect(() => {
     if (clientId && builderId) {
       fetchChats();
+      // Set up a refresh interval
+      const intervalId = setInterval(fetchChats, 5000); // 3000 milliseconds (3 seconds)
+      // Clear the interval when the component is unmounted
+      return () => clearInterval(intervalId);
     }
   }, [clientId, builderId]);
 
+  //refreshing the chatscreen
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchChats().finally(() => setRefreshing(false));
+  }, [clientId, builderId]);
+
+
   const fetchChats = async () => {
     try {
-      const response = await axios.get(`http://192.168.43.138:8000/api/client/chats/${clientId}/${builderId}`);
+      const response = await axios.get(`https://estihomebidder.com/api/client/chats/${clientId}/${builderId}`);
       setChats(response.data);
-      console.log('chats',response.data);
+      console.log('chats', response.data);
     } catch (error) {
       console.error('Error fetching client chats:', error);
     }
   };
-  const messages ={
+  const messages = {
     sender_id: clientId,
     receiver_id: builderId,
     message_content: newMessage,
   };
-  
-  const sendMessage =async () => {
-    
+
+  const sendMessage = async () => {
+
     try {
-      const response = await axios.post('http://192.168.43.138:8000/api/client/send-message', JSON.stringify(messages),{headers:{
-        'Content-Type': 'application/json',
-      }});
+      const response = await axios.post('https://estihomebidder.com/api/client/send-message', JSON.stringify(messages), {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
       setChats([...chats, response.data]);
 
       // Handle the response as needed (e.g., update the UI, show a success message)
@@ -79,13 +93,16 @@ const ChatScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={isSender(item) ? styles.senderMessage : styles.receiverMessage}>
-            <Text style={{color:'white'}}>{item.message_content}</Text>
+            <Text style={{ color: 'white' }}>{item.message_content}</Text>
           </View>
         )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
       <View style={styles.inputContainer}>
         <TextInput
-          style={[styles.input, {color:'white'}]}
+          style={[styles.input, { color: 'white' }]}
           placeholder="Type your message..."
           placeholderTextColor="white"
           value={newMessage}

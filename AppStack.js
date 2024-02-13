@@ -30,7 +30,7 @@ export default function AppStack() {
       {/* for CLIENT*/}
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="Post Project" component={PostProject} options={{ headerShown: true }} />
-      <Stack.Screen name="ChatList" component={ChatListScreen} options={{ headerShown: true, headerStyle: { backgroundColor: '#c877ed' }, }} />
+      <Stack.Screen name="ChatList" component={ChatListScreen} options={{ headerShown: true,}} />
       <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: true }} />
       {/* <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: true}} /> */}
       <Stack.Screen name="Projects" component={MyProjects} options={{ headerShown: true }} />

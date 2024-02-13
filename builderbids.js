@@ -14,9 +14,8 @@ const BuilderBids = () => {
         const storedUserId = await AsyncStorage.getItem('builderId');
         const userObject = JSON.parse(storedUserId);
         setBuilderId(userObject);
-
         // Fetch builder's bids based on builderId
-        const response = await axios.get(`http://192.168.43.138:8000/api/not-accepted-bids/${userObject.id}`);
+        const response = await axios.get(`https://estihomebidder.com/api/not-accepted-bids/${userObject.id}`);
         const builderPosts = response.data.not_accepted_bids
         setBuilderBids(builderPosts);
         console.log("bids", builderBids);
